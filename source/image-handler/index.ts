@@ -58,7 +58,38 @@ export async function handler(event: ImageHandlerEvent): Promise<ImageHandlerExe
     console.error(error);
 
     // Default fallback image
-    const { ENABLE_DEFAULT_FALLBACK_IMAGE, DEFAULT_FALLBACK_IMAGE_BUCKET, DEFAULT_FALLBACK_IMAGE_KEY } = process.env;
+    const {
+      ENABLE_ORIGINAL_FALLBACK_IMAGE,
+      ENABLE_DEFAULT_FALLBACK_IMAGE,
+      DEFAULT_FALLBACK_IMAGE_BUCKET,
+      DEFAULT_FALLBACK_IMAGE_KEY,
+    } = process.env;
+
+    console.log("ENABLE_ORIGINAL_FALLBACK_IMAGE", ENABLE_ORIGINAL_FALLBACK_IMAGE);
+
+    if (ENABLE_ORIGINAL_FALLBACK_IMAGE === "Yes") {
+      try {
+        const imageRequestInfo = await imageRequest.setup(event);
+
+        let headers = getResponseHeaders(false, isAlb);
+        headers["Content-Type"] = imageRequestInfo.contentType;
+        headers["Last-Modified"] = imageRequestInfo.lastModified;
+
+        if (imageRequestInfo.headers) {
+          headers = { ...headers, ...imageRequestInfo.headers };
+        }
+
+        return {
+          statusCode: StatusCodes.OK,
+          isBase64Encoded: true,
+          headers,
+          body: imageRequestInfo.originalImage.toString("base64"),
+        };
+      } catch (error) {
+        console.error("Error occurred while getting the original fallback image.", error);
+      }
+    }
+
     if (
       ENABLE_DEFAULT_FALLBACK_IMAGE === "Yes" &&
       !isNullOrWhiteSpace(DEFAULT_FALLBACK_IMAGE_BUCKET) &&

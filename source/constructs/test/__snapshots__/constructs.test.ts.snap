@@ -94,6 +94,14 @@ exports[`Serverless Image Handler Stack Snapshot 1`] = `
         },
         {
           "Label": {
+            "default": "Original Fallback Image (Note: Enabling original fallback image returns the original image instead of JSON object when error happens. Please refer to the implementation guide for details: https://docs.aws.amazon.com/solutions/latest/serverless-image-handler/considerations.html)",
+          },
+          "Parameters": [
+            "EnableOriginalFallbackImageParameter",
+          ],
+        },
+        {
+          "Label": {
             "default": "Auto WebP",
           },
           "Parameters": [
@@ -119,6 +127,9 @@ exports[`Serverless Image Handler Stack Snapshot 1`] = `
         },
         "EnableDefaultFallbackImageParameter": {
           "default": "Enable Default Fallback Image",
+        },
+        "EnableOriginalFallbackImageParameter": {
+          "default": "Enable Original Fallback Image",
         },
         "EnableSignatureParameter": {
           "default": "Enable Signature",
@@ -262,6 +273,15 @@ exports[`Serverless Image Handler Stack Snapshot 1`] = `
       ],
       "Default": "No",
       "Description": "Would you like to enable the default fallback image? If so, select 'Yes' and provide FallbackImageS3Bucket and FallbackImageS3Key values.",
+      "Type": "String",
+    },
+    "EnableOriginalFallbackImageParameter": {
+      "AllowedValues": [
+        "Yes",
+        "No",
+      ],
+      "Default": "No",
+      "Description": "Would you like to enable the original fallback image? Select 'Yes' if so.",
       "Type": "String",
     },
     "EnableSignatureParameter": {
@@ -1150,7 +1170,7 @@ exports[`Serverless Image Handler Stack Snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "88d7e27d3da3190e2aea077c6865651ee8e6194c25c210981852030f9b57e75c.zip",
+          "S3Key": "73c22d1a2b44315e53c9a186700c43b5ef283b4a29d88355cf135521f241b192.zip",
         },
         "Description": "sih (v6.2.2): Performs image edits and manipulations",
         "Environment": {
@@ -1173,6 +1193,9 @@ exports[`Serverless Image Handler Stack Snapshot 1`] = `
             },
             "ENABLE_DEFAULT_FALLBACK_IMAGE": {
               "Ref": "EnableDefaultFallbackImageParameter",
+            },
+            "ENABLE_ORIGINAL_FALLBACK_IMAGE": {
+              "Ref": "EnableOriginalFallbackImageParameter",
             },
             "ENABLE_SIGNATURE": {
               "Ref": "EnableSignatureParameter",
@@ -1300,6 +1323,9 @@ exports[`Serverless Image Handler Stack Snapshot 1`] = `
         "EnableDefaultFallbackImage": {
           "Ref": "EnableDefaultFallbackImageParameter",
         },
+        "EnableOriginFallbackImage": {
+          "Ref": "EnableOriginalFallbackImageParameter",
+        },
         "EnableSignature": {
           "Ref": "EnableSignatureParameter",
         },
@@ -1417,7 +1443,7 @@ exports[`Serverless Image Handler Stack Snapshot 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "9f56062eb9a2f45010283a5726b3efd71ce28091e29e98d661c217dd62e18a3b.zip",
+          "S3Key": "562257bffd5ce55cc9f4ae40a4e02146c5eb977dd0729440068880affaa34fe2.zip",
         },
         "Description": "sih (v6.2.2): Custom resource",
         "Environment": {

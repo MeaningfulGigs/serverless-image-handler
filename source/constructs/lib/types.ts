@@ -14,6 +14,7 @@ export interface SolutionConstructProps {
   readonly secretsManager: string;
   readonly secretsManagerKey: string;
   readonly enableDefaultFallbackImage: YesNo;
+  readonly enableOriginalFallbackImage: YesNo;
   readonly fallbackImageS3Bucket: string;
   readonly fallbackImageS3KeyBucket: string;
 }

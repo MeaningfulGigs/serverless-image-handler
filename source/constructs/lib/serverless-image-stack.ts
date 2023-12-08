@@ -109,6 +109,13 @@ export class ServerlessImageHandlerStack extends Stack {
       default: "No",
     });
 
+    const enableOriginalFallbackImageParameter = new CfnParameter(this, "EnableOriginalFallbackImageParameter", {
+      type: "String",
+      description: `Would you like to enable the original fallback image? Select 'Yes' if so.`,
+      allowedValues: ["Yes", "No"],
+      default: "No",
+    });
+
     const fallbackImageS3BucketParameter = new CfnParameter(this, "FallbackImageS3BucketParameter", {
       type: "String",
       description:
@@ -154,6 +161,7 @@ export class ServerlessImageHandlerStack extends Stack {
       secretsManager: secretsManagerSecretParameter.valueAsString,
       secretsManagerKey: secretsManagerKeyParameter.valueAsString,
       enableDefaultFallbackImage: enableDefaultFallbackImageParameter.valueAsString as YesNo,
+      enableOriginalFallbackImage: enableOriginalFallbackImageParameter.valueAsString as YesNo,
       fallbackImageS3Bucket: fallbackImageS3BucketParameter.valueAsString,
       fallbackImageS3KeyBucket: fallbackImageS3KeyParameter.valueAsString,
     };
@@ -256,6 +264,13 @@ export class ServerlessImageHandlerStack extends Stack {
             ],
           },
           {
+            Label: {
+              default:
+                "Original Fallback Image (Note: Enabling original fallback image returns the original image instead of JSON object when error happens. Please refer to the implementation guide for details: https://docs.aws.amazon.com/solutions/latest/serverless-image-handler/considerations.html)",
+            },
+            Parameters: [enableOriginalFallbackImageParameter.logicalId],
+          },
+          {
             Label: { default: "Auto WebP" },
             Parameters: [autoWebPParameter.logicalId],
           },
@@ -278,6 +293,9 @@ export class ServerlessImageHandlerStack extends Stack {
           },
           [enableDefaultFallbackImageParameter.logicalId]: {
             default: "Enable Default Fallback Image",
+          },
+          [enableOriginalFallbackImageParameter.logicalId]: {
+            default: "Enable Original Fallback Image",
           },
           [fallbackImageS3BucketParameter.logicalId]: {
             default: "Fallback Image S3 Bucket",

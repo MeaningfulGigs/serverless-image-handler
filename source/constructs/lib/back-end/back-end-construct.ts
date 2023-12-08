@@ -103,6 +103,7 @@ export class BackEnd extends Construct {
         SECRETS_MANAGER: props.secretsManager,
         SECRET_KEY: props.secretsManagerKey,
         ENABLE_DEFAULT_FALLBACK_IMAGE: props.enableDefaultFallbackImage,
+        ENABLE_ORIGINAL_FALLBACK_IMAGE: props.enableOriginalFallbackImage,
         DEFAULT_FALLBACK_IMAGE_BUCKET: props.fallbackImageS3Bucket,
         DEFAULT_FALLBACK_IMAGE_KEY: props.fallbackImageS3KeyBucket,
       },

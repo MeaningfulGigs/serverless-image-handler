@@ -18,6 +18,7 @@ export interface SendMetricsRequestProperties extends CustomResourceRequestPrope
   AutoWebP: string;
   EnableSignature: string;
   EnableDefaultFallbackImage: string;
+  EnableOriginFallbackImage: string;
 }
 
 export interface PutConfigRequestProperties extends CustomResourceRequestPropertiesBase {
@@ -91,6 +92,7 @@ export interface MetricsPayloadData {
   AutoWebP: string;
   EnableSignature: string;
   EnableDefaultFallbackImage: string;
+  EnableOriginFallbackImage: string;
 }
 
 export interface MetricPayload {

@@ -199,8 +199,62 @@ describe("index", () => {
     expect(result).toEqual(expectedResult);
   });
 
+  it("should return the original fallback image when an error occurs if the original fallback image is enabled", async () => {
+    // Arrange
+    process.env.ENABLE_ORIGINAL_FALLBACK_IMAGE = "Yes";
+    process.env.ENABLE_DEFAULT_FALLBACK_IMAGE = "No";
+    process.env.CORS_ENABLED = "Yes";
+    process.env.CORS_ORIGIN = "*";
+    const event: ImageHandlerEvent = { path: "/test.jpg" };
+
+    // Mock
+    mockAwsS3.getObject.mockReset();
+    mockAwsS3.getObject
+      .mockImplementationOnce(() => ({
+        promise() {
+          return Promise.reject(new ImageHandlerError(StatusCodes.INTERNAL_SERVER_ERROR, "UnknownError", null));
+        },
+      }))
+      .mockImplementationOnce(() => ({
+        promise() {
+          return Promise.resolve({
+            Body: mockImage,
+            ContentType: "image/png",
+          });
+        },
+      }));
+
+    // Act
+    const result = await handler(event);
+    const expectedResult = {
+      statusCode: StatusCodes.OK,
+      isBase64Encoded: true,
+      headers: {
+        "Access-Control-Allow-Methods": "GET",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+        "Access-Control-Allow-Credentials": true,
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "image/png",
+        "Last-Modified": undefined,
+      },
+      body: mockImage.toString("base64"),
+    };
+
+    // Assert
+    expect(mockAwsS3.getObject).toHaveBeenNthCalledWith(1, {
+      Bucket: "source-bucket",
+      Key: "test.jpg",
+    });
+    expect(mockAwsS3.getObject).toHaveBeenNthCalledWith(2, {
+      Bucket: "source-bucket",
+      Key: "test.jpg",
+    });
+    expect(result).toEqual(expectedResult);
+  });
+
   it("should return the default fallback image when an error occurs if the default fallback image is enabled", async () => {
     // Arrange
+    process.env.ENABLE_ORIGINAL_FALLBACK_IMAGE = "No";
     process.env.ENABLE_DEFAULT_FALLBACK_IMAGE = "Yes";
     process.env.DEFAULT_FALLBACK_IMAGE_BUCKET = "fallback-image-bucket";
     process.env.DEFAULT_FALLBACK_IMAGE_KEY = "fallback-image.png";

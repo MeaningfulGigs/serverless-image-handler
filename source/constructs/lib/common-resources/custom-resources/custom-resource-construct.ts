@@ -155,6 +155,7 @@ export class CustomResourcesConstruct extends Construct {
       AutoWebP: props.autoWebP,
       EnableSignature: props.enableSignature,
       EnableDefaultFallbackImage: props.enableDefaultFallbackImage,
+      EnableOriginFallbackImage: props.enableOriginalFallbackImage,
     });
   }
 

@@ -285,6 +285,7 @@ async function sendAnonymousMetric(
         AutoWebP: requestProperties.AutoWebP,
         EnableSignature: requestProperties.EnableSignature,
         EnableDefaultFallbackImage: requestProperties.EnableDefaultFallbackImage,
+        EnableOriginFallbackImage: requestProperties.EnableOriginFallbackImage,
       },
     };
 
